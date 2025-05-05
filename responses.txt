@@ -31,3 +31,10 @@ We take Linux support very seriously. But there are some problems. Most have to 
 bluej
 Ahhh, BlueJ, yes. We tried to buy out those guys long ago, but they simply won't sell... Stubborn people they are. Nothing we can do about it, I'm afraid.
 
+
+
+blanklinetest
+test for more than 1 consecutive line (entering this command should make the reader act as if it is an unknown command)
+
+
+

@@ -14,8 +14,8 @@ import java.util.*;
  * in the HashMap, the corresponding response is returned. If none of the input
  * words is recognized, one of the default responses is randomly chosen.
  * 
- * @author David J. Barnes and Michael Kölling.
- * @version 2016.02.29
+ * @author Nolan Canto
+ * @version 2025.05.05
  */
 public class Responder
 {
@@ -124,10 +124,30 @@ public class Responder
         Charset charset = Charset.forName("US-ASCII");
         Path path = Paths.get(FILE_OF_DEFAULT_RESPONSES);
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
-            String response = reader.readLine();
-            while(response != null) {
-                defaultResponses.add(response);
-                response = reader.readLine();
+            StringBuilder response = new StringBuilder();
+            String line = reader.readLine();
+            int blankLineCount = 0;
+            while(line != null) {
+                if (line.trim().isEmpty()) {
+                    blankLineCount++;
+                    if (blankLineCount > 1) {
+                        throw new IOException("Two or more consecutive blank lines were encountered.");
+                    }
+                    if (response.length() > 0) {
+                        defaultResponses.add(response.toString().trim());
+                        response = new StringBuilder();
+                    }
+                } else {
+                    blankLineCount = 0;
+                    if (response.length() > 0) {
+                        response.append("\n");
+                    }
+                    response.append(line);
+                }
+                line = reader.readLine();
+            }
+            if (response.length() > 0) {
+                defaultResponses.add(response.toString().trim());
             }
         }
         catch(FileNotFoundException e) {
